@@ -6,7 +6,7 @@
 	CompilerName="/usr/bin/c++"
 	CompilerVersion="17.0.0.17000319"
 	OSName="macOS"
-	Hostname="eduroam-169-233-221-227.ucsc.edu"
+	Hostname="Nathans-MacBook-Pro.local"
 	OSRelease="26.0.1"
 	OSVersion="25A362"
 	OSPlatform="arm64"
@@ -19,17 +19,17 @@
 	ProcessorCacheSize="131072"
 	NumberOfLogicalCPU="8"
 	NumberOfPhysicalCPU="8"
-	TotalVirtualMemory="4096"
+	TotalVirtualMemory="9216"
 	TotalPhysicalMemory="16384"
 	LogicalProcessorsPerPhysical="8"
 	ProcessorClockFrequency="0"
 	>
 	<Testing>
-		<StartDateTime>Oct 29 14:56 PDT</StartDateTime>
-		<StartTestTime>1761774966</StartTestTime>
+		<StartDateTime>Oct 30 11:32 PDT</StartDateTime>
+		<StartTestTime>1761849128</StartTestTime>
 		<TestList/>
-		<EndDateTime>Oct 29 14:56 PDT</EndDateTime>
-		<EndTestTime>1761774966</EndTestTime>
+		<EndDateTime>Oct 30 11:32 PDT</EndDateTime>
+		<EndTestTime>1761849128</EndTestTime>
 		<ElapsedMinutes>0</ElapsedMinutes>
 	</Testing>
 </Site>

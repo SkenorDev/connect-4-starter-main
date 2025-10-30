@@ -29,9 +29,9 @@ void Connect4::setUpBoard()
     _gameOptions.rowY = 6;
     _grid->initializeSquares(80, "square.png");
 
-    // if (gameHasAI()) {
-    //     setAIPlayer(AI_PLAYER);
-    // }
+    if (gameHasAI()) {
+        setAIPlayer(AI_PLAYER);
+    }
 
     startGame();
 }
@@ -207,10 +207,10 @@ void Connect4::updateAI()
     int bestVal = -1000;
     BitHolder* bestMove = nullptr;
     std::string state = stateString();
-
+    
     // Traverse all cells, evaluate minimax function for all empty cells
     _grid->forEachSquare([&](ChessSquare* square, int x, int y) {
-        int index = y * 3 + x;
+        int index = y * 7 + x;
         // Check if cell is empty
         if (state[index] == '0') {
             // Make the move
@@ -239,17 +239,40 @@ bool Connect4::isAIBoardFull(const std::string& state) {
 }
 
 int Connect4::evaluateAIBoard(const std::string& state) {
-    static const int kWinningTriples[8][3] =  { {0,1,2}, {3,4,5}, {6,7,8},  // rows
-                                                {0,3,6}, {1,4,7}, {2,5,8},  // cols
-                                                {0,4,8}, {2,4,6} };         // diagonals
-    for( int i=0; i<8; i++ ) {
-        const int *triple = kWinningTriples[i];
-        char first = state[triple[0]];
-        if( first != '0' && first == state[triple[1]] && first == state[triple[2]] ) {
-            return 10;   // someone won, negamax will handle who
-        }
+    for (int y = 0; y < 6; y++) {
+        for (int x = 0; x < 7; x++) {
+            int index = y * 7 + x;
+            auto p = state[index];
+            if(p!='0'){
+                if(x<5){
+                    if (p==state[index+1]&&p==state[index+2]&&p==state[index+3]){
+                        return 10;
+                    }
+                }
+                if(y<4){
+                    if (p==state[index+6]&&p==state[index+12]&&p==state[index+18]){
+                        return 10;
+                    }
+                }
+            if (x < 4 && y < 3) {
+    if (p == state[index + 8] &&
+        p == state[index + 16] &&
+        p == state[index + 24]) {
+        return 10;
     }
-    return 0; // No winner
+}
+          if (x > 3 && y < 4) {
+    if (p == state[index - 8] &&
+        p == state[index - 16] &&
+        p == state[index - 24]) {
+        return 10;
+    }
+}
+            }
+            }
+        }
+
+    return 0;
 }
 
 //
@@ -271,15 +294,15 @@ int Connect4::negamax(std::string& state, int depth, int playerColor)
     }
 
     int bestVal = -1000; // Min value
-    for (int y = 0; y < 3; y++) {
-        for (int x = 0; x < 3; x++) {
+    for (int y = 0; y < 6; y++) {
+        for (int x = 0; x < 7; x++) {
             // Check if cell is empty
-            if (state[y * 3 + x] == '0') {
+            if (state[y * 7 + x] == '0') {
                 // Make the move
-                state[y * 3 + x] = playerColor == HUMAN_PLAYER ? '1' : '2'; // Set the cell to the current player's color
+                state[y * 7 + x] = playerColor == HUMAN_PLAYER ? '1' : '2'; // Set the cell to the current player's color
                 bestVal = std::max(bestVal, -negamax(state, depth + 1, -playerColor));
                 // Undo the move for backtracking
-                state[y * 3 + x] = '0';
+                state[y * 7 + x] = '0';
             }
         }
     }
