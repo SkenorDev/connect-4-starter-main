@@ -27,11 +27,12 @@ void Connect4::setUpBoard()
     setNumberOfPlayers(2);
     _gameOptions.rowX = 7;
     _gameOptions.rowY = 6;
+    _gameOptions.AIMAXDepth =3;
     _grid->initializeSquares(80, "square.png");
 
-    if (gameHasAI()) {
-        setAIPlayer(AI_PLAYER);
-    }
+    // if (gameHasAI()) {
+    //     setAIPlayer(AI_PLAYER);
+    // }
 
     startGame();
 }
@@ -58,7 +59,6 @@ bool Connect4::actionForEmptyHolder(BitHolder &holder)
     // x=x-40;
     // x=x/80;
     // printf("Clicked holder at position: x=%d, y=%d\n", x, y);
-    printf("Clicked holder at position: x=%d, y=%d\n", x, y);
 
      if ( holder.bit()) {
         return false;
@@ -73,6 +73,7 @@ if (below == nullptr && y != 5) {
         bit->setPosition(holder.getPosition());
         holder.setBit(bit);
         endTurn();
+        int* array=getPossibleMoves();
         return true;
     }   
     return false;
@@ -118,8 +119,8 @@ Player* Connect4::checkForWinner()
                         return ownerAt(x,y);
                     }
                 }
-                if(y<4){
-                    if (p==state[index+6]&&p==state[index+12]&&p==state[index+18]){
+                if(y<3){
+                    if (p==state[index+7]&&p==state[index+14]&&p==state[index+21]){
                         return ownerAt(x,y);
                     }
                 }
@@ -162,7 +163,8 @@ bool Connect4::checkForDraw()
 //
 std::string Connect4::initialStateString()
 {
-    return "000000000000000000000000000000000000000000";
+    std::string s(42, '0');  // exactly 42 zeros
+    return s;
 }
 
 //
@@ -171,7 +173,7 @@ std::string Connect4::initialStateString()
 //
 std::string Connect4::stateString()
 {
-    std::string s = "000000000000000000000000000000000000000000";
+    std::string s(42, '0');
     _grid->forEachSquare([&](ChessSquare* square, int x, int y) {
         Bit *bit = square->bit();
         if (bit) {
@@ -215,7 +217,7 @@ void Connect4::updateAI()
         if (state[index] == '0') {
             // Make the move
             state[index] = '2';
-            int moveVal = -negamax(state, 0, HUMAN_PLAYER);
+            int moveVal = -negamax(state, _gameOptions.AIMAXDepth, HUMAN_PLAYER);
             // Undo the move
             state[index] = '0';
             // If the value of the current move is more than the best value, update best
@@ -320,4 +322,38 @@ Player* Connect4::ownerAt(int x, int y) const
         return nullptr;
     }
     return square->bit()->getOwner();
+}
+
+int* Connect4::getPossibleMoves()
+{
+    static int moves[7];
+     for(int i = 0; i < 7; i++) {
+        moves[i] = -1;
+    }
+    std::string state = stateString();
+    for(int i=0;i<7;i++){
+        int f=0;
+        while(moves[i]==-1){
+            int index=41;
+            index= index-(f*7);
+            index= index-(7-i);
+             if(f==6){
+                moves[i]=f;
+                break;
+            }
+            if(state[index]=='0'){
+                printf("index: %d \n",index);
+                moves[i]=f;
+            }
+           
+            f++;
+        }
+    }
+    printf("Possible moves array: ");
+    for(int i = 0; i < 7; i++) {
+        printf("[%d]=%d ", i, moves[i]);
+    }
+    printf("\n");
+
+    return moves;
 }

@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Nathan Skinner\Documents\GitHub\connect-4-starter-main\Application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Nathan Skinner\Documents\GitHub\connect-4-starter-main\imgui\imgui_demo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Nathan Skinner\Documents\GitHub\connect-4-starter-main\imgui\imgui_draw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Nathan Skinner\Documents\GitHub\connect-4-starter-main\imgui\imgui_tables.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Nathan Skinner\Documents\GitHub\connect-4-starter-main\imgui\imgui_widgets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Nathan Skinner\Documents\GitHub\connect-4-starter-main\imgui\imgui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Nathan Skinner\Documents\GitHub\connect-4-starter-main\classes\Bit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Nathan Skinner\Documents\GitHub\connect-4-starter-main\classes\BitHolder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Nathan Skinner\Documents\GitHub\connect-4-starter-main\classes\Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Nathan Skinner\Documents\GitHub\connect-4-starter-main\classes\Sprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Nathan Skinner\Documents\GitHub\connect-4-starter-main\classes\Square.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Nathan Skinner\Documents\GitHub\connect-4-starter-main\classes\ChessSquare.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Nathan Skinner\Documents\GitHub\connect-4-starter-main\classes\Connect4.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Nathan Skinner\Documents\GitHub\connect-4-starter-main\classes\Grid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Nathan Skinner\Documents\GitHub\connect-4-starter-main\classes\TicTacToe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Nathan Skinner\Documents\GitHub\connect-4-starter-main\classes\Checkers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Nathan Skinner\Documents\GitHub\connect-4-starter-main\classes\Othello.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Nathan Skinner\Documents\GitHub\connect-4-starter-main\imgui\imgui_impl_dx11.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Nathan Skinner\Documents\GitHub\connect-4-starter-main\main_win32.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Nathan Skinner\Documents\GitHub\connect-4-starter-main\imgui\imgui_impl_win32.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Nathan Skinner\Documents\GitHub\connect-4-starter-main\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{9307A9FC-51AF-3AC5-8E13-48C80065C1D1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

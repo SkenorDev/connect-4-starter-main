@@ -32,6 +32,7 @@ public:
     bool        gameHasAI() override { return true; }
     Grid* getGrid() override { return _grid; }
     Player* ownerAt(int x, int y) const;
+    int* getPossibleMoves();
 private:
     static const int EMPTY = 0;
     static const int RED_PIECE = 1;

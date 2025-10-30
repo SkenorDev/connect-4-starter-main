@@ -1,7 +1,7 @@
 {
 	"InstallScripts" : 
 	[
-		"/Users/nathanskinner/Downloads/connect-4-starter-main/build/cmake_install.cmake"
+		"C:/Users/Nathan Skinner/Documents/GitHub/connect-4-starter-main/build/cmake_install.cmake"
 	],
 	"Parallel" : false
 }
