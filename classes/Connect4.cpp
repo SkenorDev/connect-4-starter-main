@@ -109,38 +109,41 @@ void Connect4::stopGame()
 Player* Connect4::checkForWinner()
 {
     std::string state = stateString();
+
+    auto get = [&](int x, int y) {
+        return state[y * 7 + x];
+    };
+
     for (int y = 0; y < 6; y++) {
         for (int x = 0; x < 7; x++) {
-            int index = y * 7 + x;
-            auto p = state[index];
-            if(p!='0'){
-                if(x<5){
-                    if (p==state[index+1]&&p==state[index+2]&&p==state[index+3]){
-                        return ownerAt(x,y);
-                    }
-                }
-                if(y<3){
-                    if (p==state[index+7]&&p==state[index+14]&&p==state[index+21]){
-                        return ownerAt(x,y);
-                    }
-                }
-            if (x < 4 && y < 3) {
-    if (p == state[index + 8] &&
-        p == state[index + 16] &&
-        p == state[index + 24]) {
-        return ownerAt(x, y);
-    }
-}
-          if (x > 3 && y < 4) {
-    if (p == state[index - 8] &&
-        p == state[index - 16] &&
-        p == state[index - 24]) {
-        return ownerAt(x, y);
-    }
-}
-            }
-            }
+            char p = get(x, y);
+            if (p == '0') continue; 
+
+            if (x <= 7 - 4 &&
+                p == get(x+1, y) &&
+                p == get(x+2, y) &&
+                p == get(x+3, y))
+                return ownerAt(x, y);
+
+            if (y <= 6 - 4 &&
+                p == get(x, y+1) &&
+                p == get(x, y+2) &&
+                p == get(x, y+3))
+                return ownerAt(x, y);
+
+            if (x <= 7 - 4 && y <= 6 - 4 &&
+                p == get(x+1, y+1) &&
+                p == get(x+2, y+2) &&
+                p == get(x+3, y+3))
+                return ownerAt(x, y);
+
+            if (x <= 7 - 4 && y >= 3 &&
+                p == get(x+1, y-1) &&
+                p == get(x+2, y-2) &&
+                p == get(x+3, y-3))
+                return ownerAt(x, y);
         }
+    }
 
     return nullptr;
 }
@@ -240,39 +243,43 @@ bool Connect4::isAIBoardFull(const std::string& state) {
     return state.find('0') == std::string::npos;
 }
 
-int Connect4::evaluateAIBoard(const std::string& state) {
+int Connect4::evaluateAIBoard(const std::string& state) 
+{
+    auto get = [&](int x, int y) {
+        return state[y * 7 + x];
+    };
+
     for (int y = 0; y < 6; y++) {
         for (int x = 0; x < 7; x++) {
-            int index = y * 7 + x;
-            auto p = state[index];
-            if(p!='0'){
-                if(x<5){
-                    if (p==state[index+1]&&p==state[index+2]&&p==state[index+3]){
-                        return 10;
-                    }
-                }
-                if(y<4){
-                    if (p==state[index+6]&&p==state[index+12]&&p==state[index+18]){
-                        return 10;
-                    }
-                }
-            if (x < 4 && y < 3) {
-    if (p == state[index + 8] &&
-        p == state[index + 16] &&
-        p == state[index + 24]) {
-        return 10;
-    }
-}
-          if (x > 3 && y < 4) {
-    if (p == state[index - 8] &&
-        p == state[index - 16] &&
-        p == state[index - 24]) {
-        return 10;
-    }
-}
-            }
-            }
+            char p = get(x, y);
+            if (p == '0') continue;
+
+            if (x <= 7 - 4 &&
+                p == get(x+1, y) &&
+                p == get(x+2, y) &&
+                p == get(x+3, y))
+                return 10;
+
+
+            if (y <= 6 - 4 &&
+                p == get(x, y+1) &&
+                p == get(x, y+2) &&
+                p == get(x, y+3))
+                return 10;
+
+            if (x <= 7 - 4 && y <= 6 - 4 &&
+                p == get(x+1, y+1) &&
+                p == get(x+2, y+2) &&
+                p == get(x+3, y+3))
+                return 10;
+
+            if (x <= 7 - 4 && y >= 3 &&
+                p == get(x+1, y-1) &&
+                p == get(x+2, y-2) &&
+                p == get(x+3, y-3))
+                return 10;
         }
+    }
 
     return 0;
 }
@@ -336,13 +343,14 @@ int* Connect4::getPossibleMoves()
         while(moves[i]==-1){
             int index=41;
             index= index-(f*7);
-            index= index-(7-i);
+            index= index-(6-i);
              if(f==6){
                 moves[i]=f;
                 break;
             }
-            if(state[index]=='0'){
-                printf("index: %d \n",index);
+            printf("index: %d \n",index);
+            if(state[index]=='0'&& index>-1){
+                
                 moves[i]=f;
             }
            
