@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="Darwin-c++"
+	BuildStamp="20251027-1735-Experimental"
+	Name="eduroam-169-233-164-247.ucsc.edu"
+	Generator="ctest-4.1.2"
+	CompilerName="/usr/bin/c++"
+	CompilerVersion="17.0.0.17000319"
+	OSName="macOS"
+	Hostname="eduroam-169-233-221-227.ucsc.edu"
+	OSRelease="26.0.1"
+	OSVersion="25A362"
+	OSPlatform="arm64"
+	Is64Bits="1"
+	VendorString="Apple"
+	VendorID="Apple"
+	FamilyID="0"
+	ModelID="0"
+	ModelName="Apple M1 Pro"
+	ProcessorCacheSize="131072"
+	NumberOfLogicalCPU="8"
+	NumberOfPhysicalCPU="8"
+	TotalVirtualMemory="4096"
+	TotalPhysicalMemory="16384"
+	LogicalProcessorsPerPhysical="8"
+	ProcessorClockFrequency="0"
+	>
+	<Testing>
+		<StartDateTime>Oct 29 14:56 PDT</StartDateTime>
+		<StartTestTime>1761774966</StartTestTime>
+		<TestList/>
+		<EndDateTime>Oct 29 14:56 PDT</EndDateTime>
+		<EndTestTime>1761774966</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>
