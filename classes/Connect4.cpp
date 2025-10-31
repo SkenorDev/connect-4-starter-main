@@ -30,9 +30,6 @@ void Connect4::setUpBoard()
     _gameOptions.AIMAXDepth =3;
     _grid->initializeSquares(80, "square.png");
 
-    if (gameHasAI()) {
-        setAIPlayer(AI_PLAYER);
-    }
 
     startGame();
 }
@@ -70,7 +67,9 @@ if (below == nullptr && y != 5) {
 
   
     if (bit) {
-        bit->setPosition(holder.getPosition());
+        auto topSquare = _grid->getSquare(x,0);
+        bit->setPosition(topSquare->getPosition());
+        bit->moveTo(holder.getPosition());
         holder.setBit(bit);
         endTurn();
         
@@ -109,7 +108,6 @@ void Connect4::stopGame()
 Player* Connect4::checkForWinner()
 {
     std::string state = stateString();
-    int* array=getPossibleMoves(state);
     auto get = [&](int x, int y) {
         return state[y * 7 + x];
     };
@@ -216,7 +214,7 @@ void Connect4::updateAI()
     //_grid->forEachSquare([&](ChessSquare* square, int x, int y) {
     for(int x=0;x<7;x++){
         int y=moves[x];
-        int index = y * 7 + x;
+        int index = (5-y) * 7 + x;
         if (state[index] == '0') {
             // Make the move
             state[index] = '2';
@@ -257,6 +255,10 @@ int Connect4::negamax(std::string& state, int depth, int playerColor)
         return 0; // Draw
     }
 
+    if (depth == 3) {
+        return -score;
+    }
+    
     int bestVal = -1000; // Min value
         for (int x = 0; x < 7; x++) {
             // Check if cell is empty
@@ -264,13 +266,13 @@ int Connect4::negamax(std::string& state, int depth, int playerColor)
 
             auto moves=getPossibleMoves(state);
             int y=moves[x];
-            if (state[y * 7 + x] == '0') {
+            if (state[(5-y) * 7 + x] == '0') {
                 // Make the move
             
-                state[y * 7 + x] = playerColor == HUMAN_PLAYER ? '1' : '2'; // Set the cell to the current player's color
+                state[(5-y) * 7 + x] = playerColor == HUMAN_PLAYER ? '1' : '2'; // Set the cell to the current player's color
                 bestVal = std::max(bestVal, -negamax(state, depth + 1, -playerColor));
                 // Undo the move for backtracking
-                state[y * 7 + x] = '0';
+                state[(5-y) * 7 + x] = '0';
             }
     }
 
@@ -295,26 +297,26 @@ int Connect4::evaluateAIBoard(const std::string& state)
                 p == get(x+1, y) &&
                 p == get(x+2, y) &&
                 p == get(x+3, y))
-                return 10;
+                return 1000;
 
 
             if (y <= 6 - 4 &&
                 p == get(x, y+1) &&
                 p == get(x, y+2) &&
                 p == get(x, y+3))
-                return 10;
+                return 1000;
 
             if (x <= 7 - 4 && y <= 6 - 4 &&
                 p == get(x+1, y+1) &&
                 p == get(x+2, y+2) &&
                 p == get(x+3, y+3))
-                return 10;
+                return 1000;
 
             if (x <= 7 - 4 && y >= 3 &&
                 p == get(x+1, y-1) &&
                 p == get(x+2, y-2) &&
                 p == get(x+3, y-3))
-                return 10;
+                return 1000;
         }
     }
 
