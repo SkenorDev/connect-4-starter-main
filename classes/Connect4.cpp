@@ -210,7 +210,7 @@ void Connect4::setStateString(const std::string &s)
 void Connect4::updateAI() 
 {
     int bestVal = -1000;
-    BitHolder* bestMove = nullptr;
+    int bestMove = NULL;
     std::string state = stateString();
     int* moves=getPossibleMoves(state);
     //_grid->forEachSquare([&](ChessSquare* square, int x, int y) {
@@ -225,7 +225,7 @@ void Connect4::updateAI()
             state[index] = '0';
             // If the value of the current move is more than the best value, update best
             if (moveVal > bestVal) {
-                *bestMove = getHolderAt(x,y);
+                bestMove = x;
                 bestVal = moveVal;
             }
         }
@@ -234,7 +234,7 @@ void Connect4::updateAI()
 
     // Make the best move
     if(bestMove) {
-        if (actionForEmptyHolder(*bestMove)) {
+        if (actionForEmptyHolder(getHolderAt(bestMove,moves[bestMove]))) {
         }
     }
 }
@@ -350,7 +350,6 @@ int* Connect4::getPossibleMoves(std::string &state)
                 moves[i]=f;
                 break;
             }
-            printf("index: %d \n",index);
             if(state[index]=='0'&& index>-1){
                 
                 moves[i]=f;
@@ -359,11 +358,7 @@ int* Connect4::getPossibleMoves(std::string &state)
             f++;
         }
     }
-    printf("Possible moves array: ");
     for(int i = 0; i < 7; i++) {
-        printf("[%d]=%d ", i, moves[i]);
     }
-    printf("\n");
-
     return moves;
 }
