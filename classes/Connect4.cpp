@@ -27,13 +27,22 @@ void Connect4::setUpBoard()
     setNumberOfPlayers(2);
     _gameOptions.rowX = 7;
     _gameOptions.rowY = 6;
-    _gameOptions.AIMAXDepth =3;
+    _gameOptions.AIMAXDepth =5;
     _grid->initializeSquares(80, "square.png");
 
 
     startGame();
 }
-
+int Connect4::getLowestEmptyRow(int col)
+{
+    for (int row = 6 - 1; row >= 0; row--) {
+        ChessSquare* square = _grid->getSquare(col, row);
+        if (square && !square->bit()) {
+            return row;
+        }
+    }
+    return -1;
+}
 //
 // about the only thing we need to actually fill out for tic-tac-toe
 //
@@ -42,12 +51,12 @@ bool Connect4::actionForEmptyHolder(BitHolder &holder)
  ImVec2 pos= holder.getPosition();
      //_grid->getHolder(pos.x, pos.y);
      ChessSquare* square = static_cast<ChessSquare*>(&holder);
-      int x = square->getColumn();
-      int y = square->getRow();
-         auto  below = ownerAt(x,y);
-      if(y!=6){
-      below = ownerAt(x,y+1);
-      }
+    int x = square->getColumn();
+    int y = square->getRow();
+    int targetRow = getLowestEmptyRow(x);
+    if (targetRow == -1) {
+        return false;
+    }
    
     // int x = static_cast<int>(pos.x);
     // int y = static_cast<int>(pos.y);
@@ -60,17 +69,19 @@ bool Connect4::actionForEmptyHolder(BitHolder &holder)
      if ( holder.bit()) {
         return false;
     }
-if (below == nullptr && y != 5) {
-    return false;
-}
     Bit *bit = PieceForPlayer(getCurrentPlayer()->playerNumber() == 0 ? RED_PLAYER : YELLOW_PLAYER);
 
   
     if (bit) {
-        auto topSquare = _grid->getSquare(x,0);
-        bit->setPosition(topSquare->getPosition());
-        bit->moveTo(holder.getPosition());
-        holder.setBit(bit);
+        ChessSquare* topSquare = _grid->getSquare(x, 0);
+        ChessSquare* targetSquare = _grid->getSquare(x, targetRow);
+        if (targetRow > 0) {
+            bit->setPosition(topSquare->getPosition());
+            bit->moveTo(targetSquare->getPosition());
+        } else {
+            bit->setPosition(targetSquare->getPosition());
+        }
+        targetSquare->setBit(bit);
         endTurn();
         
         return true;
@@ -201,6 +212,15 @@ void Connect4::setStateString(const std::string &s)
     });
 }
 
+int aiLowestRow(const std::string& state, int col) {
+    for (int row = 6 - 1; row >= 0; row--) {
+        char piece = state[row*7+col];
+        if (piece == '0') {
+            return row;
+        }
+    }
+    return -1;  
+}
 
 //
 // this is the function that will be called by the AI
@@ -208,22 +228,23 @@ void Connect4::setStateString(const std::string &s)
 void Connect4::updateAI() 
 {
     int bestVal = -1000;
-    int bestMove = NULL;
+    BitHolder* bestMove = nullptr;
     std::string state = stateString();
-    int* moves=getPossibleMoves(state);
     //_grid->forEachSquare([&](ChessSquare* square, int x, int y) {
     for(int x=0;x<7;x++){
-        int y=moves[x];
-        int index = (5-y) * 7 + x;
-        if (state[index] == '0') {
+        if (state[x] == '0') {
+            int lowestRow = aiLowestRow(state, x);
+            if (lowestRow > 5)
+            continue;
+            int index = lowestRow * 7 + x;
             // Make the move
             state[index] = '2';
-            int moveVal = -negamax(state, _gameOptions.AIMAXDepth, HUMAN_PLAYER);
+            int moveVal = -negamax(state, 0, HUMAN_PLAYER);
             // Undo the move
             state[index] = '0';
             // If the value of the current move is more than the best value, update best
             if (moveVal > bestVal) {
-                bestMove = x;
+                bestMove = _grid->getSquare(x,lowestRow);
                 bestVal = moveVal;
             }
         }
@@ -232,7 +253,7 @@ void Connect4::updateAI()
 
     // Make the best move
     if(bestMove) {
-        if (actionForEmptyHolder(getHolderAt(bestMove,moves[bestMove]))) {
+        if (actionForEmptyHolder(*bestMove)) {
         }
     }
 }
@@ -255,7 +276,7 @@ int Connect4::negamax(std::string& state, int depth, int playerColor)
         return 0; // Draw
     }
 
-    if (depth == 3) {
+    if (depth == 5) {
         return -score;
     }
     
@@ -263,17 +284,17 @@ int Connect4::negamax(std::string& state, int depth, int playerColor)
         for (int x = 0; x < 7; x++) {
             // Check if cell is empty
             
-
-            auto moves=getPossibleMoves(state);
-            int y=moves[x];
-            if (state[(5-y) * 7 + x] == '0') {
-                // Make the move
-            
-                state[(5-y) * 7 + x] = playerColor == HUMAN_PLAYER ? '1' : '2'; // Set the cell to the current player's color
-                bestVal = std::max(bestVal, -negamax(state, depth + 1, -playerColor));
-                // Undo the move for backtracking
-                state[(5-y) * 7 + x] = '0';
-            }
+        // Check if a move is possible in this column
+        if (state[x] == '0') {
+            int lowestRow = aiLowestRow(state, x);
+            int index = lowestRow * 7 + x;
+            // Make the move
+        
+            state[index] = playerColor == HUMAN_PLAYER ? '1' : '2'; // Set the cell to the current player's color
+            bestVal = std::max(bestVal, -negamax(state, depth + 1, -playerColor));
+            // Undo the move for backtracking
+            state[index] = '0';
+        }
     }
 
     return bestVal;
@@ -334,33 +355,4 @@ Player* Connect4::ownerAt(int x, int y) const
         return nullptr;
     }
     return square->bit()->getOwner();
-}
-
-int* Connect4::getPossibleMoves(std::string &state)
-{
-    static int moves[7];
-     for(int i = 0; i < 7; i++) {
-        moves[i] = -1;
-    }
-    for(int i=0;i<7;i++){
-        int f=0;
-        while(moves[i]==-1){
-            int index=41;
-            index= index-(f*7);
-            index= index-(6-i);
-             if(f==6){
-                moves[i]=f;
-                break;
-            }
-            if(state[index]=='0'&& index>-1){
-                
-                moves[i]=f;
-            }
-           
-            f++;
-        }
-    }
-    for(int i = 0; i < 7; i++) {
-    }
-    return moves;
 }
